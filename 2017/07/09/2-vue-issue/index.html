@@ -3,14 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>数沃前端组Blog</title>
+  <title>Vue踩坑之路 | 数沃前端组Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="数沃前端组Blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="使用 vue + webpack 开发项目快接近一年了，踩过大大小小的坑，一直没时间去整理，其实就是懒，今天应我们老大要求，写一篇踩坑总结，以下踩坑是基于项目实战过程中经常遇到的。  1. 直接用下标修改数组值时，视图没更新实际开发，数组类型是很常用的类型，比如这里定义一个布尔值数组，绑定在一组 li 列表上，当值为 true 时为该元素绑定一个类名 active // 声明在data对象上 ar">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue踩坑之路">
+<meta property="og:url" content="http://yoursite.com/2017/07/09/2-vue-issue/index.html">
 <meta property="og:site_name" content="数沃前端组Blog">
+<meta property="og:description" content="使用 vue + webpack 开发项目快接近一年了，踩过大大小小的坑，一直没时间去整理，其实就是懒，今天应我们老大要求，写一篇踩坑总结，以下踩坑是基于项目实战过程中经常遇到的。  1. 直接用下标修改数组值时，视图没更新实际开发，数组类型是很常用的类型，比如这里定义一个布尔值数组，绑定在一组 li 列表上，当值为 true 时为该元素绑定一个类名 active // 声明在data对象上 ar">
+<meta property="og:updated_time" content="2017-07-26T11:12:31.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="数沃前端组Blog">
+<meta name="twitter:title" content="Vue踩坑之路">
+<meta name="twitter:description" content="使用 vue + webpack 开发项目快接近一年了，踩过大大小小的坑，一直没时间去整理，其实就是懒，今天应我们老大要求，写一篇踩坑总结，以下踩坑是基于项目实战过程中经常遇到的。  1. 直接用下标修改数组值时，视图没更新实际开发，数组类型是很常用的类型，比如这里定义一个布尔值数组，绑定在一组 li 列表上，当值为 true 时为该元素绑定一个类名 active // 声明在data对象上 ar">
   
     <link rel="alternate" href="/atom.xml" title="数沃前端组Blog" type="application/atom+xml">
   
@@ -59,9 +63,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-2-vue-issue" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-2-vue-issue" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/07/09/2-vue-issue/" class="article-date">
   <time datetime="2017-07-08T16:00:00.000Z" itemprop="datePublished">2017-07-09</time>
@@ -74,8 +76,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/09/2-vue-issue/">Vue踩坑之路</a>
+    <h1 class="article-title" itemprop="name">
+      Vue踩坑之路
     </h1>
   
 
@@ -144,99 +146,19 @@ this.$refs.ruleForm.resetFields();
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-1-disable-amp" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/06/30/1-disable-amp/" class="article-date">
-  <time datetime="2017-06-29T16:00:00.000Z" itemprop="datePublished">2017-06-30</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/30/1-disable-amp/">我决定在我的网站上禁用AMP[译文]</a>
-    </h1>
+    <a href="/2017/06/30/1-disable-amp/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">我决定在我的网站上禁用AMP[译文]</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>原文：<a href="https://www.alexkras.com/i-decided-to-disable-amp-on-my-site" target="_blank" rel="external">https://www.alexkras.com/i-decided-to-disable-amp-on-my-site</a><br>（有删减）</p>
-<p><img src="https://www.alexkras.com/wp-content/uploads/amp-link.png" alt="图片"></p>
-<p>我和Google的Accelerated Mobile Pages (AMP) 项目有一段很长的渊源，但昨天我忍无可忍了。</p>
-<p>我在Twitter（iPhone 6的Safari）上注意到有人用一个AMP链接到我的网站。我回复了一个真实链接，但当我点击这个链接的时候，又被重定向到了AMP的版本。</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/06/30/1-disable-amp/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/06/30/1-disable-amp/" data-id="cj5w93olm0000kdwmnbhijuv0" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/06/23/hello-world/" class="article-date">
-  <time datetime="2017-06-23T07:05:24.000Z" itemprop="datePublished">2017-06-23</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/23/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start-Test"><a href="#Quick-Start-Test" class="headerlink" title="Quick Start Test"></a>Quick Start Test</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/06/23/hello-world/" data-id="cj5w93olu0002kdwmer93pwjd" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 </section>
         
