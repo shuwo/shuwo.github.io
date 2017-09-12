@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/07/09/2-vue-issue/index.html">
 <meta property="og:site_name" content="数沃前端组Blog">
 <meta property="og:description" content="使用 vue + webpack 开发项目快接近一年了，踩过大大小小的坑，一直没时间去整理，其实就是懒，今天应我们老大要求，写一篇踩坑总结，以下踩坑是基于项目实战过程中经常遇到的。  1. 直接用下标修改数组值时，视图没更新实际开发，数组类型是很常用的类型，比如这里定义一个布尔值数组，绑定在一组 li 列表上，当值为 true 时为该元素绑定一个类名 active // 声明在data对象上 ar">
-<meta property="og:updated_time" content="2017-07-26T11:12:31.000Z">
+<meta property="og:updated_time" content="2017-09-12T09:02:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Vue踩坑之路">
 <meta name="twitter:description" content="使用 vue + webpack 开发项目快接近一年了，踩过大大小小的坑，一直没时间去整理，其实就是懒，今天应我们老大要求，写一篇踩坑总结，以下踩坑是基于项目实战过程中经常遇到的。  1. 直接用下标修改数组值时，视图没更新实际开发，数组类型是很常用的类型，比如这里定义一个布尔值数组，绑定在一组 li 列表上，当值为 true 时为该元素绑定一个类名 active // 声明在data对象上 ar">
@@ -97,7 +97,8 @@ this.arr[index] = true;
 <pre><code>Vue.set(this.arr, indexOfItem, newValue);
 
 this.arr.splice(indexOfItem, 1, newValue)
-</code></pre><h3 id="2-对象新增属性后，视图没更新"><a href="#2-对象新增属性后，视图没更新" class="headerlink" title="2. 对象新增属性后，视图没更新"></a>2. 对象新增属性后，视图没更新</h3><p>不仅数组，对象新增属性也存在视图更新问题，有时候我们需要在已经存在的对象 object 上添加一个新的属性，一种习惯性的写法就是 <code>this.object.newKey = &#39;newValue&#39;</code></p>
+</code></pre><a id="more"></a>
+<h3 id="2-对象新增属性后，视图没更新"><a href="#2-对象新增属性后，视图没更新" class="headerlink" title="2. 对象新增属性后，视图没更新"></a>2. 对象新增属性后，视图没更新</h3><p>不仅数组，对象新增属性也存在视图更新问题，有时候我们需要在已经存在的对象 object 上添加一个新的属性，一种习惯性的写法就是 <code>this.object.newKey = &#39;newValue&#39;</code></p>
 <p>如果只是单纯的想要添加一个不用显示在视图上的新属性（例如只是想将数据发送到后台），这种写法没毛病；但若想更新到视图上，该写法是无效的。Vue 不能检测到对象属性的添加或删除，由于 Vue 会在初始化实例时对属性执行 getter/setter 转化过程，所以属性必须在 data 对象上存在才能让 Vue 转换它，这样才能让它是响应的。</p>
 <p>Vue 不允许在已经创建的实例上动态添加新的根级响应式属性，但可以使用 <code>Vue.set(object, key, value)</code> 方法将响应属性添加到嵌套的对象上：</p>
 <pre><code>Vue.set(this.object, &apos;newKey&apos;, &apos;newValue&apos;);
@@ -140,7 +141,7 @@ this.$refs.ruleForm.resetFields();
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/07/09/2-vue-issue/" data-id="cj5w93ols0001kdwmolsm4i00" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/07/09/2-vue-issue/" data-id="cj7hdebpy0001h0wms0jadofg" class="article-share-link">Share</a>
       
       
     </footer>
@@ -148,6 +149,15 @@ this.$refs.ruleForm.resetFields();
   
     
 <nav id="article-nav">
+  
+    <a href="/2017/08/10/vue2.x render函数的简单使用/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          vue2.x render函数的简单使用
+        
+      </div>
+    </a>
   
   
     <a href="/2017/06/30/1-disable-amp/" id="article-nav-older" class="article-nav-link-wrap">
@@ -176,7 +186,7 @@ this.$refs.ruleForm.resetFields();
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li></ul>
     </div>
   </div>
 
@@ -189,15 +199,19 @@ this.$refs.ruleForm.resetFields();
       <ul>
         
           <li>
+            <a href="/2017/09/11/vue单元测试基本使用/">Vue单元测试基本使用</a>
+          </li>
+        
+          <li>
+            <a href="/2017/08/10/vue2.x render函数的简单使用/">vue2.x render函数的简单使用</a>
+          </li>
+        
+          <li>
             <a href="/2017/07/09/2-vue-issue/">Vue踩坑之路</a>
           </li>
         
           <li>
             <a href="/2017/06/30/1-disable-amp/">我决定在我的网站上禁用AMP[译文]</a>
-          </li>
-        
-          <li>
-            <a href="/2017/06/23/hello-world/">Hello World</a>
           </li>
         
       </ul>

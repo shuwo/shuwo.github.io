@@ -61,6 +61,98 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-vue单元测试基本使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/09/11/vue单元测试基本使用/" class="article-date">
+  <time datetime="2017-09-10T16:00:00.000Z" itemprop="datePublished">2017-09-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/11/vue单元测试基本使用/">Vue单元测试基本使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>单元测试，在维基百科中解释是：在计算机编程中，单元测试（英语：Unit Testing）又称为模块测试, 是针对程序模块（软件设计的最小单位）来进行正确性检验的测试工作。 程序单元是应用的最小可测试部件。 在过程化编程中，一个单元就是单个程序、函数、过程等；对于面向对象编程，最小单元就是方法，包括基类（超类）、抽象类、或者派生类（子类）中的方法。而vue单元测试在我看来就是为了隔离应用部件并证明这些单个vue组件是正确的，以在开发过程的早期就能发现问题，提高代码质量和可维护性，从而有效的减少维护成本，降低 Bug 率。</p>
+<h2 id="1-准备工作"><a href="#1-准备工作" class="headerlink" title="1.准备工作"></a>1.准备工作</h2><p>整理一下配置测试环境所需要的依赖：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">karma <span class="comment">//test runner，提供测试所需的浏览器环境、监测代码改变自动重测、整合持续集成等功能</span></div><div class="line">phantomjs-prebuilt <span class="comment">//phantomjs，在终端运行的浏览器虚拟机，也可以直接使用了chrome</span></div><div class="line">mocha <span class="comment">//test framework，测试框架，运行测试</span></div><div class="line">chai <span class="comment">//assertion framework, 断言库，提供多种断言，与测试框架配合使用</span></div><div class="line">sinon <span class="comment">//测试辅助工具，提供 spy、stub、mock 三种测试手段，帮助捏造特定场景</span></div><div class="line">karma-webpack <span class="comment">//karma 中的 webpack 插件， 连接karma和webpack的桥梁。不经过webpack编译命令是文件是无法独立运行的，karma需要了解你的webpack配置，决定如何处理你的测试文件。</span></div><div class="line">karma-mocha <span class="comment">//在karma 中使用 mocha测试框架的 插件</span></div><div class="line">karma-sinon-chai <span class="comment">//在karma 中使用 sinon-chai断言库的 插件</span></div><div class="line">sinon-chai <span class="comment">//karma 中的 chai 插件</span></div><div class="line">karma-sourcemap-loader <span class="comment">//karma 中的 sourcemap 插件</span></div><div class="line">karma-phantomjs-launcher <span class="comment">//karma 中的 phantomjs 插件,如使用chrome为测试浏览器则为karma-chrome-launcher</span></div><div class="line">karma-spec-reporter <span class="comment">//在终端输出测试结果的插件</span></div><div class="line">karma-coverage <span class="comment">//代码覆盖率统计工具coverage</span></div></pre></td></tr></table></figure></p>
+<p>要在karma使用某个测试工具都需要安装karma对应的插件。<br>相关配置安装一波<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm i karma mocha chai sinon karma-webpack karma-mocha karma-sinon-chai sinon-chai karma-sourcemap-loader karma-chrome-launcher karma-spec-reporter karma-coverage --save-dev</div></pre></td></tr></table></figure></p>
+<p>安装好了，可以先跑一下看看是否安装正确，到package.json的scripts中注册一个命令：”unit”: “cross-env BABEL_ENV=test karma start karma.conf.js –single-run”，然后运行。</p>
+<h2 id="2-配置-karma"><a href="#2-配置-karma" class="headerlink" title="2. 配置 karma"></a>2. 配置 karma</h2>
+        
+          <p class="article-more-link">
+            <a href="/2017/09/11/vue单元测试基本使用/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/09/11/vue单元测试基本使用/" data-id="cj7hdebq10002h0wm8alqy00m" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-vue2.x render函数的简单使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/08/10/vue2.x render函数的简单使用/" class="article-date">
+  <time datetime="2017-08-09T16:00:00.000Z" itemprop="datePublished">2017-08-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/10/vue2.x render函数的简单使用/">vue2.x render函数的简单使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="vue2-x-render函数的简单使用"><a href="#vue2-x-render函数的简单使用" class="headerlink" title="vue2.x render函数的简单使用"></a>vue2.x render函数的简单使用</h1><p>vue render函数<a href="https://cn.vuejs.org/v2/guide/render-function.html" target="_blank" rel="external">官方链接</a>.</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>我们写的模板最终都会转化为render函数，render函数即为vue模板渲染函数,简单用法如下：</p>
+<p>有个通过 <strong>level</strong> prop 动态生成heading 标签的组件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;test-component :level=&quot;1&quot;&gt;Hello world!&lt;/test-component&gt;</div></pre></td></tr></table></figure>
+<p>很容易联想到如下简单的实现方式：</p>
+<figure class="highlight plain"><figcaption><span>render函数-2017.8.3/vue2.x render函数的简单使用.md</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">    &lt;div&gt;</div><div class="line">        &lt;h1 v-if=&quot;level === 1&quot;&gt;</div><div class="line">            &lt;slot&gt;&lt;/slot&gt;</div><div class="line">        &lt;/h1&gt;</div><div class="line">        &lt;h2 v-else-if=&quot;level === 2&quot;&gt;</div><div class="line">            &lt;slot&gt;&lt;/slot&gt;</div><div class="line">        &lt;/h2&gt;</div><div class="line">        &lt;h3 v-else-if=&quot;level === 3&quot;&gt;</div><div class="line">            &lt;slot&gt;&lt;/slot&gt;</div><div class="line">        &lt;/h3&gt;</div><div class="line">        &lt;h4 v-else-if=&quot;level === 4&quot;&gt;</div><div class="line">            &lt;slot&gt;&lt;/slot&gt;</div><div class="line">        &lt;/h4&gt;</div><div class="line">        &lt;h5 v-else-if=&quot;level === 5&quot;&gt;</div><div class="line">            &lt;slot&gt;&lt;/slot&gt;</div><div class="line">        &lt;/h5&gt;</div><div class="line">        &lt;h6 v-else-if=&quot;level === 6&quot;&gt;</div><div class="line">            &lt;slot&gt;&lt;/slot&gt;</div><div class="line">        &lt;/h6&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/template&gt;</div><div class="line"></div><div class="line">&lt;script&gt;</div><div class="line">export default &#123;</div><div class="line">    name:&apos;TestComponent&apos;,</div><div class="line">    props:&#123;</div><div class="line">    	level:&#123;</div><div class="line">    		type:Number,</div><div class="line">    		required:true</div><div class="line">    	&#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<p>但是这样看起来有点繁琐，现在通过render函数简化以上代码</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/08/10/vue2.x render函数的简单使用/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/08/10/vue2.x render函数的简单使用/" data-id="cj7hdebq30003h0wmeduaudpz" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-2-vue-issue" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/07/09/2-vue-issue/" class="article-date">
@@ -95,50 +187,16 @@ this.arr[index] = true;
 <pre><code>Vue.set(this.arr, indexOfItem, newValue);
 
 this.arr.splice(indexOfItem, 1, newValue)
-</code></pre><h3 id="2-对象新增属性后，视图没更新"><a href="#2-对象新增属性后，视图没更新" class="headerlink" title="2. 对象新增属性后，视图没更新"></a>2. 对象新增属性后，视图没更新</h3><p>不仅数组，对象新增属性也存在视图更新问题，有时候我们需要在已经存在的对象 object 上添加一个新的属性，一种习惯性的写法就是 <code>this.object.newKey = &#39;newValue&#39;</code></p>
-<p>如果只是单纯的想要添加一个不用显示在视图上的新属性（例如只是想将数据发送到后台），这种写法没毛病；但若想更新到视图上，该写法是无效的。Vue 不能检测到对象属性的添加或删除，由于 Vue 会在初始化实例时对属性执行 getter/setter 转化过程，所以属性必须在 data 对象上存在才能让 Vue 转换它，这样才能让它是响应的。</p>
-<p>Vue 不允许在已经创建的实例上动态添加新的根级响应式属性，但可以使用 <code>Vue.set(object, key, value)</code> 方法将响应属性添加到嵌套的对象上：</p>
-<pre><code>Vue.set(this.object, &apos;newKey&apos;, &apos;newValue&apos;);
-// 或者 Vue 的实例方法
-this.$set(this.object, &apos;newKey&apos;, &apos;newValue&apos;);
-</code></pre><p>上述方法每次只能在对象里新增一个属性，但有时我们需要同时新增多个属性，可以使用<code>Object.assign()</code>,这种情况下需要注意:</p>
-<pre><code>// 错误写法,添加到对象上的新属性不会触发更新，与上面提到的习惯性写法一样
-Object.assign(this.object, { a: 1, b: 2 })
-
-// 正确写法，创建一个新的对象，让它包含原对象的属性和新的属性
-this.object = Object.assign({}, this.object, { a: 1, b: 2 })
-</code></pre><p>顺便一提，vue 也提供了<code>Vue.delete</code>方法来确保删除后能触发更新视图</p>
-<h3 id="3-父组件通过prop传递对象给子组件"><a href="#3-父组件通过prop传递对象给子组件" class="headerlink" title="3. 父组件通过prop传递对象给子组件"></a>3. 父组件通过prop传递对象给子组件</h3><p>子组件通过 props 选项来使用父组件的数据，prop 是单向绑定的：当父组件的属性变化时，将传导给子组件，但是不会反过来。这是为了防止子组件无意修改了父组件的状态，这也是 vue2.0 移除了 <code>.sync</code> 的理由(但在2.3.0+ 2又重新引入了 <code>.sync</code>修饰符)</p>
-<p>但单向绑定的前提是传递的数据是基本数据类型或数组，我们都知道，ECMAScript 变量包含两种不同数据类型的值：基本类型和引用数据类型，如果通过 props 传递的是引用类型的 object ，当在子组件中修改object的属性值，也会同时修改父组件的数据，因为他们引用的是同个地址的变量。</p>
-<p>如果不希望子组件修改父组件的状态，可以对该对象进行深复制，再赋值给一个计算属性：</p>
-<pre><code>computed: {    
-    newObject () {
-        return JSON.parse(JSON.stringify(this.object));
-    }
-}
-</code></pre><h3 id="4-父组件传递给子组件的数据延迟问题"><a href="#4-父组件传递给子组件的数据延迟问题" class="headerlink" title="4. 父组件传递给子组件的数据延迟问题"></a>4. 父组件传递给子组件的数据延迟问题</h3><p>用户的界面操作，可能会不断改变父组件的数据，并传递给子组件，eg: 当用户点击某一个按钮后，修改父组件的数据并<code>立即</code>调用子组件里的方法。这时候我们可能会理所当然的认为：被调用的子组件方法执行时，获得的是跟父组件同步的最新数据。事实上此时得到的是旧数据。</p>
-<p>Vue 异步执行props数据的更新，当观察到数据变化，Vue 将开启一个队列，并缓冲在同一事件循环中发生的所有数据改变。然后，在下一个的事件循环“tick”中，Vue 刷新队列并执行实际（已去重的）工作。</p>
-<p>为了能在数据更新之后才执行相应的回调函数，可以使用 vue 提供的 <code>Vue.nextTick(callback)</code> 方法，或者使用 <code>setTimeout(fn, 0)</code></p>
-<h3 id="5-访问子组件的ref属性报错：undefined"><a href="#5-访问子组件的ref属性报错：undefined" class="headerlink" title="5. 访问子组件的ref属性报错：undefined"></a>5. 访问子组件的ref属性报错：undefined</h3><p>有时我们需要在 js 中直接访问子组件，为此可以使用 ref 为子组件指定一个索引 ID。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">el-dialog</span> <span class="attr">title</span>=<span class="string">"提示"</span> <span class="attr">v-model</span>=<span class="string">"visible"</span> <span class="attr">size</span>=<span class="string">"tiny"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">el-form</span> <span class="attr">:model</span>=<span class="string">"ruleForm"</span> <span class="attr">ref</span>=<span class="string">"ruleForm"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">el-form-item</span> <span class="attr">label</span>=<span class="string">"测试"</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">el-input</span> <span class="attr">v-model</span>=<span class="string">"ruleForm.user"</span>&gt;</span><span class="tag">&lt;/<span class="name">el-input</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">el-form-item</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">el-form-item</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">el-button</span> <span class="attr">type</span>=<span class="string">"primary"</span> @<span class="attr">click</span>=<span class="string">"onSubmit"</span>&gt;</span>查询<span class="tag">&lt;/<span class="name">el-button</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">el-form-item</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">el-form</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">el-dialog</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>（此处以element组件为例）曾经碰到这种问题：想在每次弹框时重置表单</p>
-<pre><code>this.visible = true;
-this.$refs.ruleForm.resetFields();
-</code></pre><p>第一次显示弹框时，控制台报错 <code>Uncaught TypeError: Cannot read property &#39;resetFields&#39; of undefined</code>，之后就没报这个错了。主要因为当 visible 设为 true 后立即访问子组件的索引时，初次渲染，组件还没挂载完成，$refs 只在组件渲染完成后才填充，并且它是非响应式的，可以使用 Vue.nextTick()，待渲染完成后再调用。</p>
-<h3 id="6-ref-与-v-for"><a href="#6-ref-与-v-for" class="headerlink" title="6. ref 与 v-for"></a>6. ref 与 v-for</h3><p>通常我们会为子组件指定一个 String 类型的索引 id，该索引指向单独一个组件。但如果将 ref 与 v-for 合在一起使用，那么该 ref 是一个数组，且会将 ref 值相同的组件放在同一个数组里面，通过数组访问v-for出来的每个组件。还有一点需要注意：vue 会判断 ref 属性值，当为 true 时才会将索引值注册在组件上，而数字 0 的布尔值为 false，无效的索引值。</p>
-<h3 id="7-组件上直接监听dom事件"><a href="#7-组件上直接监听dom事件" class="headerlink" title="7. 组件上直接监听dom事件"></a>7. 组件上直接监听dom事件</h3><p>不能在组件标签上面直接监听dom事件，要在 html 标签上面监听，组件标签上监听的事件只有在组件内部有手动 emit 才会触发。<br>例如 element 的组件 <code>&lt;el-button @click=&quot;onSubmit&quot;&gt;&lt;/el-button&gt;</code>，click 会触发是因为组件 el-button 监听了里面的 button 标签，然后再调用 <code>$emit(&#39;click&#39;)</code> 才会触发</p>
-<h3 id="8-使用自定义事件的表单输入组件"><a href="#8-使用自定义事件的表单输入组件" class="headerlink" title="8. 使用自定义事件的表单输入组件"></a>8. 使用自定义事件的表单输入组件</h3><p>自定义组件使用 v-model，可以将父组件的数据传到子组件的 props 的 value 属性。然后子组件再根据 value，填充自己的内容，当输入内容更改时，再触发一个 input 事件告知父组件（不要监听数据变化进行触发，不然父组件有更改的话，会死循环），父组件会用 input 事件的数据更新父组件数据。</p>
-<h3 id="9-自定义指令"><a href="#9-自定义指令" class="headerlink" title="9. 自定义指令"></a>9. 自定义指令</h3><p>hook方法中的el元素参数，如果模板中的组件是reuse的（例如v-for或者v-if），那么在不同组件中的指令hook方法中的el元素是同一个。</p>
-<h3 id="10-使用字面量语法传递数值"><a href="#10-使用字面量语法传递数值" class="headerlink" title="10. 使用字面量语法传递数值"></a>10. 使用字面量语法传递数值</h3><p>当我们想通过 props 传递数字时，初学者可能会这样写: <code>&lt;comp some-prop=&quot;1&quot;&gt;&lt;/comp&gt;</code></p>
-<p>因为它是一个字面 prop，得到的值是字符串 “1” 而不是 number。如果想传递一个实际的 number，需要使用 v-bind，从而让它的值被当作 JavaScript 表达式计算：<code>&lt;comp :some-prop=&quot;1&quot;&gt;&lt;/comp&gt;</code></p>
-<h3 id="11-key的使用"><a href="#11-key的使用" class="headerlink" title="11. key的使用"></a>11. key的使用</h3><p>Vue 的设计理念之一就是尽可能高效地渲染元素，所以通常会复用已有的元素而不是从头开始渲染。当我们使用 v-if 和 v-else 指令，且两个模板使用了相同的元素，切换条件时，原先的数据不会被替换。这有时候往往不是我们想要的结果，这时只需添加一个具有唯一值的 key 属性，来声明“这两个元素是完全独立的——不要复用它们”，可以实现在数据发生变化时候重新渲染整个元素。</p>
-<hr>
-<p>以上是这一段时间使用 vue 开发过程中遇到的坑，由于水平有限，如有补充或者写错的地方欢迎指出。</p>
-
+</code></pre>
+        
+          <p class="article-more-link">
+            <a href="/2017/07/09/2-vue-issue/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/07/09/2-vue-issue/" data-id="cj5w93ols0001kdwmolsm4i00" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/07/09/2-vue-issue/" data-id="cj7hdebpy0001h0wms0jadofg" class="article-share-link">Share</a>
       
       
     </footer>
@@ -182,52 +240,7 @@ this.$refs.ruleForm.resetFields();
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/06/30/1-disable-amp/" data-id="cj5w93olm0000kdwmnbhijuv0" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/06/23/hello-world/" class="article-date">
-  <time datetime="2017-06-23T07:05:24.000Z" itemprop="datePublished">2017-06-23</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/23/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start-Test"><a href="#Quick-Start-Test" class="headerlink" title="Quick Start Test"></a>Quick Start Test</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/06/23/hello-world/" data-id="cj5w93olu0002kdwmer93pwjd" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/06/30/1-disable-amp/" data-id="cj7hdebpu0000h0wm9oeyni9q" class="article-share-link">Share</a>
       
       
     </footer>
@@ -254,7 +267,7 @@ this.$refs.ruleForm.resetFields();
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li></ul>
     </div>
   </div>
 
@@ -267,15 +280,19 @@ this.$refs.ruleForm.resetFields();
       <ul>
         
           <li>
+            <a href="/2017/09/11/vue单元测试基本使用/">Vue单元测试基本使用</a>
+          </li>
+        
+          <li>
+            <a href="/2017/08/10/vue2.x render函数的简单使用/">vue2.x render函数的简单使用</a>
+          </li>
+        
+          <li>
             <a href="/2017/07/09/2-vue-issue/">Vue踩坑之路</a>
           </li>
         
           <li>
             <a href="/2017/06/30/1-disable-amp/">我决定在我的网站上禁用AMP[译文]</a>
-          </li>
-        
-          <li>
-            <a href="/2017/06/23/hello-world/">Hello World</a>
           </li>
         
       </ul>
