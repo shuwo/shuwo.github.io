@@ -48,9 +48,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -61,9 +61,51 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-vue单元测试基本使用" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-5-nodejs-cluster" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/09/11/vue单元测试基本使用/" class="article-date">
+    <a href="/2017/10/14/5-nodejs-cluster/" class="article-date">
+  <time datetime="2017-10-13T16:00:00.000Z" itemprop="datePublished">2017-10-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/14/5-nodejs-cluster/">nodejs cluster模块分析</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近做了点nodejs项目，对nodejs的cluster怎么利用多进程处理请求产生了疑问，于是着手进行了研究，之后发现这其中竟大有文章！一切还是先从遥远的TCP说起吧。。。</p>
+<h2 id="TCP与Socket"><a href="#TCP与Socket" class="headerlink" title="TCP与Socket"></a>TCP与Socket</h2><p>说到TCP，相信很多人都相当了解了，大学已经教过，但是又相信有很多人也不是很了解，要不是当时没听，要不也可能是自身的编程能力不足以去实践相关内容，写到这我还特意去翻了一下大学的计算机网络教材，内容是很丰富的，但教人实践的内容还是太少了，里面的内容都把学生当成了有相当的Linux编程能力的人了，所以结果就是大部分只上了一年编程课刚学会几个Hello world程序的大二学生，听了这门课后一脸懵逼，即使记住了也因为没什么实践很快忘了，当年我就是这么懵逼过来的。<br>所以，扯了这些，结果是什么呢，结果就是我们要多动手！而要动手建立一条TCP连接可以用socket来实现，不过这里不是要说socket用法，只是来简单聊一聊他们之间的一点小联系，以便于理解后面的内容。</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/10/14/5-nodejs-cluster/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/10/14/5-nodejs-cluster/" data-id="cj92me1ug00044x4h4dzqjg8h" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-4-vue单元测试基本使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/09/11/4-vue单元测试基本使用/" class="article-date">
   <time datetime="2017-09-10T16:00:00.000Z" itemprop="datePublished">2017-09-11</time>
 </a>
     
@@ -75,7 +117,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/11/vue单元测试基本使用/">Vue单元测试基本使用</a>
+      <a class="article-title" href="/2017/09/11/4-vue单元测试基本使用/">Vue单元测试基本使用</a>
     </h1>
   
 
@@ -90,13 +132,13 @@
 <h2 id="2-配置-karma"><a href="#2-配置-karma" class="headerlink" title="2. 配置 karma"></a>2. 配置 karma</h2>
         
           <p class="article-more-link">
-            <a href="/2017/09/11/vue单元测试基本使用/#more">Read More</a>
+            <a href="/2017/09/11/4-vue单元测试基本使用/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/09/11/vue单元测试基本使用/" data-id="cj7hdebq10002h0wm8alqy00m" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/09/11/4-vue单元测试基本使用/" data-id="cj92me1uc00024x4hw1wblknf" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -106,9 +148,9 @@
 
 
   
-    <article id="post-vue2.x render函数的简单使用" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-3-vue2.x render函数的简单使用" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/08/10/vue2.x render函数的简单使用/" class="article-date">
+    <a href="/2017/08/10/3-vue2.x render函数的简单使用/" class="article-date">
   <time datetime="2017-08-09T16:00:00.000Z" itemprop="datePublished">2017-08-10</time>
 </a>
     
@@ -120,7 +162,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/10/vue2.x render函数的简单使用/">vue2.x render函数的简单使用</a>
+      <a class="article-title" href="/2017/08/10/3-vue2.x render函数的简单使用/">vue2.x render函数的简单使用</a>
     </h1>
   
 
@@ -137,13 +179,13 @@
 <p>但是这样看起来有点繁琐，现在通过render函数简化以上代码</p>
         
           <p class="article-more-link">
-            <a href="/2017/08/10/vue2.x render函数的简单使用/#more">Read More</a>
+            <a href="/2017/08/10/3-vue2.x render函数的简单使用/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/08/10/vue2.x render函数的简单使用/" data-id="cj7hdebq30003h0wmeduaudpz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/08/10/3-vue2.x render函数的简单使用/" data-id="cj92me1ue00034x4hjtljtoug" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -196,7 +238,7 @@ this.arr.splice(indexOfItem, 1, newValue)
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/07/09/2-vue-issue/" data-id="cj7hdebpy0001h0wms0jadofg" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/07/09/2-vue-issue/" data-id="cj92me1u800014x4hj6iqsadp" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -240,7 +282,7 @@ this.arr.splice(indexOfItem, 1, newValue)
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/06/30/1-disable-amp/" data-id="cj7hdebpu0000h0wm9oeyni9q" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/06/30/1-disable-amp/" data-id="cj92me1u200004x4hvic2vgjs" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -267,7 +309,7 @@ this.arr.splice(indexOfItem, 1, newValue)
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li></ul>
     </div>
   </div>
 
@@ -275,16 +317,20 @@ this.arr.splice(indexOfItem, 1, newValue)
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
         
           <li>
-            <a href="/2017/09/11/vue单元测试基本使用/">Vue单元测试基本使用</a>
+            <a href="/2017/10/14/5-nodejs-cluster/">nodejs cluster模块分析</a>
           </li>
         
           <li>
-            <a href="/2017/08/10/vue2.x render函数的简单使用/">vue2.x render函数的简单使用</a>
+            <a href="/2017/09/11/4-vue单元测试基本使用/">Vue单元测试基本使用</a>
+          </li>
+        
+          <li>
+            <a href="/2017/08/10/3-vue2.x render函数的简单使用/">vue2.x render函数的简单使用</a>
           </li>
         
           <li>
@@ -308,7 +354,7 @@ this.arr.splice(indexOfItem, 1, newValue)
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2017 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>

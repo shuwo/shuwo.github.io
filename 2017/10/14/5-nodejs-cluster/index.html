@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>nodejs cluster模块分析 | 数沃前端组Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近做了点nodejs项目，对nodejs的cluster怎么利用多进程处理请求产生了疑问，于是着手进行了研究，之后发现这其中竟大有文章！一切还是先从遥远的TCP说起吧。。。 TCP与Socket说到TCP，相信很多人都相当了解了，大学已经教过，但是又相信有很多人也不是很了解，要不是当时没听，要不也可能是自身的编程能力不足以去实践相关内容，写到这我还特意去翻了一下大学的计算机网络教材，内容是很丰富">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nodejs cluster模块分析">
+<meta property="og:url" content="http://yoursite.com/2017/10/14/5-nodejs-cluster/index.html">
+<meta property="og:site_name" content="数沃前端组Blog">
+<meta property="og:description" content="最近做了点nodejs项目，对nodejs的cluster怎么利用多进程处理请求产生了疑问，于是着手进行了研究，之后发现这其中竟大有文章！一切还是先从遥远的TCP说起吧。。。 TCP与Socket说到TCP，相信很多人都相当了解了，大学已经教过，但是又相信有很多人也不是很了解，要不是当时没听，要不也可能是自身的编程能力不足以去实践相关内容，写到这我还特意去翻了一下大学的计算机网络教材，内容是很丰富">
+<meta property="og:image" content="http://yoursite.com/images/nodejs-cluster.png">
+<meta property="og:updated_time" content="2017-10-22T10:51:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nodejs cluster模块分析">
+<meta name="twitter:description" content="最近做了点nodejs项目，对nodejs的cluster怎么利用多进程处理请求产生了疑问，于是着手进行了研究，之后发现这其中竟大有文章！一切还是先从遥远的TCP说起吧。。。 TCP与Socket说到TCP，相信很多人都相当了解了，大学已经教过，但是又相信有很多人也不是很了解，要不是当时没听，要不也可能是自身的编程能力不足以去实践相关内容，写到这我还特意去翻了一下大学的计算机网络教材，内容是很丰富">
+<meta name="twitter:image" content="http://yoursite.com/images/nodejs-cluster.png">
+  
+    <link rel="alternate" href="/atom.xml" title="数沃前端组Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">数沃前端组Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-5-nodejs-cluster" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/10/14/5-nodejs-cluster/" class="article-date">
+  <time datetime="2017-10-13T16:00:00.000Z" itemprop="datePublished">2017-10-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      nodejs cluster模块分析
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近做了点nodejs项目，对nodejs的cluster怎么利用多进程处理请求产生了疑问，于是着手进行了研究，之后发现这其中竟大有文章！一切还是先从遥远的TCP说起吧。。。</p>
+<h2 id="TCP与Socket"><a href="#TCP与Socket" class="headerlink" title="TCP与Socket"></a>TCP与Socket</h2><p>说到TCP，相信很多人都相当了解了，大学已经教过，但是又相信有很多人也不是很了解，要不是当时没听，要不也可能是自身的编程能力不足以去实践相关内容，写到这我还特意去翻了一下大学的计算机网络教材，内容是很丰富的，但教人实践的内容还是太少了，里面的内容都把学生当成了有相当的Linux编程能力的人了，所以结果就是大部分只上了一年编程课刚学会几个Hello world程序的大二学生，听了这门课后一脸懵逼，即使记住了也因为没什么实践很快忘了，当年我就是这么懵逼过来的。<br>所以，扯了这些，结果是什么呢，结果就是我们要多动手！而要动手建立一条TCP连接可以用socket来实现，不过这里不是要说socket用法，只是来简单聊一聊他们之间的一点小联系，以便于理解后面的内容。</p>
+<a id="more"></a>
+<p>应用层通过传输层进行TCP通信时，有时TCP需要为多个应用程序进程提供并发服务。多个TCP连接或多个应用程序进程可能需要通过同一个TCP协议端口传输数据。为了区别不同的应用程序进程和连接，许多计算机操作系统为应用程序与TCP协议交互提供了称为套接字 (Socket)的接口，区分不同应用程序进程间的网络通信和连接。</p>
+<p>我们可以用一个四元组来确定一条TCP连接（源ip，源端口，目标ip，目标端口），而连接是通过socket来建立的（服务端进行bind和listen-&gt;客户端发起connect-&gt;服务端accept），计算机系统就是通过socket来区分不同的TCP连接的。所以我们可以看出来，只要目标ip/端口不同，服务端可以用同一个端口生成多个socket，建立多条连接。<br>但是，一个进程只能监听一个端口，一个端口怎么生成多个socket呢？其实服务器端程序一般会把socket和服务器某个端口（ip+端口）bind起来, 这样构成了一个特殊的socket, 这个socket没有目标ip和端口。socket进行listen之后当有新的连接进来时, 系统将请求存进队列（此时TCP握三次手完成）, 后续可以再调用accept拿到队列的请求，返回一个新的socket, 这个socket是由四元组建立的, 也就对应了一个唯一的连接。</p>
+<p>说完这些，可以来聊一聊nodejs是怎样建立一个TCP服务的了。</p>
+<h2 id="nodejs-createServer启动TCP服务小解析"><a href="#nodejs-createServer启动TCP服务小解析" class="headerlink" title="nodejs createServer启动TCP服务小解析"></a>nodejs createServer启动TCP服务小解析</h2><p>一般我们用nodejs启动一个TCP服务可能是这样的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">require</span>(<span class="string">'net'</span>).createServer(<span class="function"><span class="keyword">function</span>(<span class="params">sock</span>) </span>&#123;</div><div class="line">    sock.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">        sock.write(<span class="string">'Hello world'</span>);</div><div class="line">    &#125;);</div><div class="line">&#125;).listen(<span class="number">8080</span>, <span class="string">'127.0.0.1'</span>);</div></pre></td></tr></table></figure>
+<p>进到<code>createServer</code>一看(代码都在net模块中)，里面return了一个<code>Server</code>对象，<code>Server</code>继承<code>EventEmitter</code>，将<code>createServer</code>的参数做为<code>connection</code>事件的回调函数，这块比较简单就不贴代码了。我们需要关注的是<code>Server</code>的<code>listen</code>方法，其不同的参数最终都会调用到<code>listenInCluster</code>方法。cluster！是的这和cluster有关，但先不管它，我们先管在主进程中它的执行：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">listenInCluster</span>(<span class="params">server, address, port, addressType,</span></span></div><div class="line">                         backlog, fd, exclusive) &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line"></div><div class="line">  <span class="keyword">if</span> (cluster.isMaster || exclusive) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">    server._listen2(address, port, addressType, backlog, fd);</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">// ...</span></div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>从代码我们可以看到<code>listenInCluster</code>最终是调用了<code>_listen2</code>方法，它就是服务启动的关键，其定义如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">setupListenHandle</span>(<span class="params">address, port, addressType, backlog, fd</span>) </span>&#123;</div><div class="line">  </div><div class="line">    <span class="comment">// ...</span></div><div class="line"></div><div class="line">    <span class="keyword">var</span> rval = <span class="literal">null</span>;</div><div class="line"></div><div class="line">    <span class="comment">// ...</span></div><div class="line"></div><div class="line">    <span class="keyword">if</span> (rval === <span class="literal">null</span>)</div><div class="line">        rval = createServerHandle(address, port, addressType, fd);</div><div class="line"></div><div class="line">    <span class="comment">// ...</span></div><div class="line">    <span class="keyword">this</span>._handle = rval;</div><div class="line"></div><div class="line">  <span class="comment">// ...</span></div><div class="line">  <span class="keyword">this</span>._handle.onconnection = onconnection;</div><div class="line">  <span class="keyword">this</span>._handle.owner = <span class="keyword">this</span>;</div><div class="line"></div><div class="line">  <span class="keyword">var</span> err = <span class="keyword">this</span>._handle.listen(backlog || <span class="number">511</span>);</div><div class="line"></div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其中<code>createServerHandle</code>方法就不展开了，它就如之前所说的：把socket和服务器某个端口（ip+端口）bind起来, 这样构成了一个特殊的socket, 这个socket没有目标ip和端口。它绑定了<code>address+port</code>并返回了一个特殊socket（句柄）<code>rval</code>，可以看到最后它调用了listen对端口进行监听，并且指定了一个回调函数<code>onconnection</code>,函数会在C++层当accept请求时触发，其回调参数之一就是前面提到的accept后与客户端连接的新socket句柄。到这里再看一下<code>onconnection</code>的代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">onconnection</span>(<span class="params">err, clientHandle</span>) </span>&#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  <span class="keyword">var</span> self = handle.owner;</div><div class="line">  <span class="keyword">var</span> socket = <span class="keyword">new</span> Socket(&#123;</div><div class="line">    <span class="attr">handle</span>: clientHandle,</div><div class="line">    <span class="attr">allowHalfOpen</span>: self.allowHalfOpen,</div><div class="line">    <span class="attr">pauseOnCreate</span>: self.pauseOnConnect</div><div class="line">  &#125;);</div><div class="line">  socket.readable = socket.writable = <span class="literal">true</span>;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="comment">// ...</span></div><div class="line">  self.emit(<span class="string">'connection'</span>, socket);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到nodejs在对socket句柄进一步封装后（封装成nodejs的Socket对象），再触发server(由createServer创建)的<code>connection</code>事件。这时我们再回到前面<code>createServer</code>的介绍，其监听了<code>connection</code>事件，所以最终流程走下来<code>createServer</code>的的方法参数将被触发，并且可以拿到一个nodejs的Socket对象进行write与read操作，与客户端进行通信。</p>
+<p>至此我们已经对nodejs启动一个TCP服务的流程有了了解，接下来就到主题cluster了。</p>
+<h2 id="cluster为我们做了什么"><a href="#cluster为我们做了什么" class="headerlink" title="cluster为我们做了什么"></a>cluster为我们做了什么</h2><p>开始说代码之前，先来聊一聊喂鸽子吧。假设你坐在布拉格广场前静静地坐着，然后往前面撒了一把狗粮，喔不对是鸽粮，然后周围的一群鸽子都震惊了并往你这边飞抢东西吃。这个现象可以用一个词来形容就是“惊群“。然而这只是我的瞎掰，我们程序员理解的惊群应该是：多个进程／线程同时阻塞等待某个事件，当事件发生时唤醒了所有等待的进程／线程，但最终只有一个能对事件进行处理。很明显这对cpu造成了浪费，而cluster的多进程模型对此做了处理：只用一个master进程等待请求，然后有请求到来时使用round-robin轮询分配请求给各个子进程进行处理，这块后面提到的源码会涉及到，这里就不深入了。除了round-robin，还有其他的一些cluster为我们做的，就用代码来talk吧：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> cluster = <span class="built_in">require</span>(<span class="string">'cluster'</span>);</div><div class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"></div><div class="line"><span class="keyword">if</span> (cluster.isMaster) &#123;</div><div class="line"></div><div class="line">  <span class="keyword">const</span> numCPUs = <span class="built_in">require</span>(<span class="string">'os'</span>).cpus().length;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; numCPUs; i++) &#123;</div><div class="line">    cluster.fork();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line"></div><div class="line">  <span class="comment">// Worker processes have a http server.</span></div><div class="line">  http.Server(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</div><div class="line">    res.writeHead(<span class="number">200</span>);</div><div class="line">    res.end(<span class="string">'hello world\n'</span>);</div><div class="line">  &#125;).listen(<span class="number">8000</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上代码就是cluster的典型用法，在nodejs启动文件判断当前进程，如果当前进程是master进程，那么就根据cpu的核数fork出相同数量的进程，否则（worker进程）就启动一个http服务，所以一般这样会给一个核心分配一个worker进程来启动一个服务，搭起一个小服务集群。但是问题来了，为什么这里可以有多个进程同时监听一个端口呢，是因为listen做的一些文章，下面再一步步深入解析。由于http.Server其实是继承了net.Server，所以跟前面创建TCP服务一样，<code>listen</code>最终也是调用到<code>listenInCluster</code>，我们从这里重新开始。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">listenInCluster</span>(<span class="params">server, address, port, addressType,</span></span></div><div class="line">                         backlog, fd, exclusive) &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line"></div><div class="line">  <span class="keyword">const</span> serverQuery = &#123;</div><div class="line">    <span class="attr">address</span>: address,</div><div class="line">    <span class="attr">port</span>: port,</div><div class="line">    <span class="attr">addressType</span>: addressType,</div><div class="line">    <span class="attr">fd</span>: fd,</div><div class="line">    <span class="attr">flags</span>: <span class="number">0</span></div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  <span class="comment">// Get the master's server handle, and listen on it</span></div><div class="line">  cluster._getServer(server, serverQuery, listenOnMasterHandle);</div><div class="line"></div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>listenInCluster</code>在worker进程中调用<code>cluster._getServer</code>，并且传入了一个函数<code>listenOnMasterHandle</code>。这里还不知道它做了什么，所以再进入<code>cluster._getServer</code>看看（由于当前是在worker进程，cluster模块文件是<code>lib/internal/cluster/child.js</code>）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">cluster._getServer = <span class="function"><span class="keyword">function</span>(<span class="params">obj, options, cb</span>) </span>&#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line"></div><div class="line">  <span class="keyword">const</span> message = util._extend(&#123;</div><div class="line">    <span class="attr">act</span>: <span class="string">'queryServer'</span>,</div><div class="line">    <span class="attr">index</span>: indexes[indexesKey],</div><div class="line">    <span class="attr">data</span>: <span class="literal">null</span></div><div class="line">  &#125;, options);</div><div class="line"></div><div class="line">  send(message, (reply, handle) =&gt; &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> obj._setServerData === <span class="string">'function'</span>)</div><div class="line">      obj._setServerData(reply.data);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (handle)</div><div class="line">      shared(reply, handle, indexesKey, cb);  <span class="comment">// Shared listen socket.</span></div><div class="line">    <span class="keyword">else</span></div><div class="line">      rr(reply, indexesKey, cb);              <span class="comment">// Round-robin.</span></div><div class="line">  &#125;);</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>关注<code>send</code>方法，它调用了<code>sendHelper</code>方法，该方法是在<code>internal/cluster/utils</code>定义的，相当一个消息转发器处理进程间通信，它发送一个“进程内部消息“(<code>internalMessage</code>)，而worker进程在master进程被fork出来的时候监听了<code>internalMessage</code>:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// lib/internal/cluster/master.js</span></div><div class="line">worker.process.on(<span class="string">'internalMessage'</span>, internal(worker, onmessage));</div></pre></td></tr></table></figure>
+<p>所以最终在worker进程发送的消息，触发了master进程执行了<code>onmessage</code>方法，<code>onmessage</code>判断<code>message.act === &#39;queryServer&#39;</code>执行<code>queryServer</code>，而就是在这个方法中，新建了一个<code>RoundRobinHandle</code>调度器，就是这个东西分配请求做了负载均衡。这里用地址和端口号作为key将调度器存储起来，调度器不会被worker创建两次，最后将worker进程add到队列。相关代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// lib/internal/cluster/master.js</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">queryServer</span>(<span class="params">worker, message</span>) </span>&#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  <span class="keyword">var</span> handle = handles[key];</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (handle === <span class="literal">undefined</span>) &#123;</div><div class="line">    <span class="keyword">var</span> <span class="keyword">constructor</span> = RoundRobinHandle;</div><div class="line">    // ...</div><div class="line"></div><div class="line">    handles[key] = handle = new <span class="keyword">constructor</span>(key,</div><div class="line">                                            message.address,</div><div class="line">                                            message.port,</div><div class="line">                                            message.addressType,</div><div class="line">                                            message.fd,</div><div class="line">                                            message.flags);</div><div class="line">  &#125;</div><div class="line">  // ...</div><div class="line">  // Set custom server data</div><div class="line">  handle.add(worker, (errno, reply, handle) =&gt; &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后我们再来看看<code>RoundRobinHandle</code>,它里面调用<code>net.createServer</code>方法新建了一个server，并且开始监听，这块可以看前面内容。不过与前面不同的是，server在<code>listening</code>事件完成时拿到监听端口的那个特殊socket句柄，重置了<code>onconnection</code>方法，当新的连接建立时方法被调用，将accept连接的socket句柄分发到队列里的worker进行处理(distribute)。对于<code>listening</code>事件，它在<code>Server.listen</code>执行后就会触发，代码就在<code>setupListenHandle</code>方法里面。<code>RoundRobinHandle</code>代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// lib/internal/cluster/round_robin_handle.js</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">RoundRobinHandle</span>(<span class="params">key, address, port, addressType, fd</span>) </span>&#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  <span class="keyword">this</span>.server = net.createServer(assert.fail);</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (fd &gt;= <span class="number">0</span>)</div><div class="line">    <span class="keyword">this</span>.server.listen(&#123; fd &#125;);</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (port &gt;= <span class="number">0</span>)</div><div class="line">    <span class="keyword">this</span>.server.listen(port, address);</div><div class="line">  <span class="keyword">else</span></div><div class="line">    <span class="keyword">this</span>.server.listen(address);  <span class="comment">// UNIX socket path.</span></div><div class="line"></div><div class="line">  <span class="keyword">this</span>.server.once(<span class="string">'listening'</span>, () =&gt; &#123;</div><div class="line">    <span class="keyword">this</span>.handle = <span class="keyword">this</span>.server._handle;</div><div class="line">    <span class="keyword">this</span>.handle.onconnection = <span class="function">(<span class="params">err, handle</span>) =&gt;</span> <span class="keyword">this</span>.distribute(err, handle);</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;);</div><div class="line">&#125;</div><div class="line">RoundRobinHandle.prototype.distribute = <span class="function"><span class="keyword">function</span>(<span class="params">err, handle</span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.handles.push(handle);</div><div class="line">  <span class="keyword">const</span> worker = <span class="keyword">this</span>.free.shift();</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (worker)</div><div class="line">    <span class="keyword">this</span>.handoff(worker);</div><div class="line">&#125;;</div><div class="line">RoundRobinHandle.prototype.handoff = <span class="function"><span class="keyword">function</span>(<span class="params">worker</span>) </span>&#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  <span class="keyword">const</span> message = &#123; <span class="attr">act</span>: <span class="string">'newconn'</span>, <span class="attr">key</span>: <span class="keyword">this</span>.key &#125;;</div><div class="line"></div><div class="line">  sendHelper(worker.process, message, handle, (reply) =&gt; &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>从代码上看到最终调度器调用<code>handoff</code>方法，通过<code>sendHelper</code>向worker进程发送一个新连接到达的消息<code>newconn</code>，执行worker进程的server的<code>onconnection</code>方法，worker进程相关代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// lib/internal/cluster/child.js</span></div><div class="line">cluster._setupWorker = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  process.on(<span class="string">'internalMessage'</span>, internal(worker, onmessage));</div><div class="line">  send(&#123; <span class="attr">act</span>: <span class="string">'online'</span> &#125;);</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">onmessage</span>(<span class="params">message, handle</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (message.act === <span class="string">'newconn'</span>)</div><div class="line">      onconnection(message, handle);</div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (message.act === <span class="string">'disconnect'</span>)</div><div class="line">      _disconnect.call(worker, <span class="literal">true</span>);</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"><span class="comment">// Round-robin connection.</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">onconnection</span>(<span class="params">message, handle</span>) </span>&#123;</div><div class="line">  <span class="keyword">const</span> key = message.key;</div><div class="line">  <span class="keyword">const</span> server = handles[key];</div><div class="line">  <span class="keyword">const</span> accepted = server !== <span class="literal">undefined</span>;</div><div class="line"></div><div class="line">  send(&#123; <span class="attr">ack</span>: message.seq, accepted &#125;);</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (accepted)</div><div class="line">    server.onconnection(<span class="number">0</span>, handle);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>走到这里worker进程的server就拿到了连接的socket句柄可以进行处理，但是好像有点问题，worker进程的server好像还没起起来啊，前面讲的只是在master进程的调度器启动了一个server，worker进程并没有server。我们又得翻回前面的内容看一看了，看看之前提到的workder进程的<code>cluster._getServer</code>，里面<code>send</code>方法发送了一个函数，函数里面的<code>rr(reply, indexesKey, cb);</code>就是创建了workder进程server的代码。</p>
+<p>先来看看<code>cluster._getServer</code>中发送的函数怎么被调用的。这里需要来了解一下之前出现了几次的<code>sendHelper</code>，它是cluster模块用来做进程间通信的，另外还有一个<code>internal</code>方法用来处理通信的回调。<code>cluster._getServer</code>的<code>send</code>会调用<code>sendHelper</code>，它会用<code>message.seq</code>当key把send的函数存储起来。然后在<code>internal</code>方法处理通信的回调时判断message是否有这个key，是否能找到这个函数，可以的话就执行。而在master进程执行<code>queryServer</code>把worker进程添加到调度器中时添加了一个回调函数，回调函数send了一个带seq的消息，并且handle为null，就是这个消息触发了<code>cluster._getServer</code>发送的函数的执行。相关代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// `internal/cluster/utils.js`</span></div><div class="line"><span class="keyword">const</span> callbacks = &#123;&#125;;</div><div class="line"><span class="keyword">var</span> seq = <span class="number">0</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sendHelper</span>(<span class="params">proc, message, handle, cb</span>) </span>&#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> cb === <span class="string">'function'</span>)</div><div class="line">    callbacks[seq] = cb;</div><div class="line"></div><div class="line">  message.seq = seq;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">internal</span>(<span class="params">worker, cb</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">onInternalMessage</span>(<span class="params">message, handle</span>) </span>&#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">    <span class="keyword">var</span> fn = cb;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (message.ack !== <span class="literal">undefined</span> &amp;&amp; callbacks[message.ack] !== <span class="literal">undefined</span>) &#123;</div><div class="line">      fn = callbacks[message.ack];</div><div class="line">      <span class="keyword">delete</span> callbacks[message.ack];</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;;</div><div class="line">&#125;</div><div class="line"><span class="comment">// lib/internal/cluster/master.js</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">queryServer</span>(<span class="params">worker, message</span>) </span>&#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  <span class="comment">// Set custom server data</span></div><div class="line">  handle.add(worker, (errno, reply, handle) =&gt; &#123;</div><div class="line">    reply = util._extend(&#123;</div><div class="line">      <span class="comment">// ...</span></div><div class="line">      ack: message.seq,</div><div class="line">      <span class="comment">// ...</span></div><div class="line">    &#125;, reply);</div><div class="line">    <span class="comment">// ...</span></div><div class="line">    send(worker, reply, handle);</div><div class="line">  &#125;);</div></pre></td></tr></table></figure>
+<p>最终，<code>rr(reply, indexesKey, cb);</code>执行，它构造了一个假的socket句柄，句柄设置了一个不做操作的listen方法。然后执行cb，这个cb也就是前面提到过的<code>listenOnMasterHandle</code>，它会把假socket句柄赋值给worker进程的<code>server._handle</code>，随后由于<code>server._handle</code>的存在，<code>server._listen2(address, port, addressType, backlog, fd);</code>也不会做任何操作,也就是说worker进程创建的server是不会对端口进行监听的。相关代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// lib/internal/cluster/child.js</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">rr</span>(<span class="params">message, indexesKey, cb</span>) </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">listen</span>(<span class="params">backlog</span>) </span>&#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  cb(<span class="number">0</span>, handle);</div><div class="line">&#125;</div><div class="line"><span class="comment">// lib/net.js</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">listenOnMasterHandle</span>(<span class="params">err, handle</span>) </span>&#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  server._handle = handle;</div><div class="line">  server._listen2(address, port, addressType, backlog, fd);</div><div class="line">&#125;</div><div class="line"><span class="comment">// setupListenHandle就是_listen2</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">setupListenHandle</span>(<span class="params">address, port, addressType, backlog, fd</span>) </span>&#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>._handle) &#123;</div><div class="line">    debug(<span class="string">'setupListenHandle: have a handle already'</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// ...</span></div></pre></td></tr></table></figure>
+<p>至此，cluster模块如何建立多进程服务的就算讲完了。画个草图总结下吧：</p>
+<p><img src="/images/nodejs-cluster.png" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/10/14/5-nodejs-cluster/" data-id="cj92me1ug00044x4h4dzqjg8h" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/09/11/4-vue单元测试基本使用/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">Vue单元测试基本使用</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/10/14/5-nodejs-cluster/">nodejs cluster模块分析</a>
+          </li>
+        
+          <li>
+            <a href="/2017/09/11/4-vue单元测试基本使用/">Vue单元测试基本使用</a>
+          </li>
+        
+          <li>
+            <a href="/2017/08/10/3-vue2.x render函数的简单使用/">vue2.x render函数的简单使用</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/09/2-vue-issue/">Vue踩坑之路</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/30/1-disable-amp/">我决定在我的网站上禁用AMP[译文]</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
